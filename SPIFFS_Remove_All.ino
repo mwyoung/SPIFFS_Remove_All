@@ -1,12 +1,13 @@
 //Remove all files on the SPIFFS file system
 //Help from: https://techtutorialsx.com/2019/02/24/esp32-arduino-removing-a-file-from-the-spiffs-file-system/
 //and https://arduino-esp8266.readthedocs.io/en/latest/filesystem.html
+//and https://www.esp8266.com/viewtopic.php?t=8459
 //Author: Miles Young, 08 2019
 
 #include <FS.h>
 
 void listFiles();
-void removeAllFiles(bool removeFiles);
+void removeFiles();
 
 void setup() {
     Serial.begin(115200);
@@ -18,7 +19,9 @@ void setup() {
     Serial.println("SPIFFS init");
 
     listFiles();
-    removeAllFiles(true);
+    removeFiles();
+    listFiles();
+    Serial.println("Done"); 
 }
 
 void loop() {
@@ -26,22 +29,23 @@ void loop() {
 }
 
 void listFiles() {
-    removeAllFiles(false);
-}
-
-void removeAllFiles(bool removeFiles) {
-    File root = SPIFFS.open("/"); //open root directory
-    File file;
+    Dir root = SPIFFS.openDir("/"); //open root directory
 
     Serial.println("Current Files:");
-    do{
-        file = root.openNextFile();
-        Serial.print(file.name());
-
-        if(removeFiles){
-            SPIFFS.remove(file.name());
-            Serial.print("\tREMOVED");
-        }
+    while (root.next()) {
+        Serial.print(root.fileName());
         Serial.println();
-    } while(file);
+    }
+}
+
+void removeFiles(){
+    Serial.println("FORMATTING SPIFFS");
+    Serial.println("This may take several seconds...");
+    bool formatted = SPIFFS.format();
+    if (formatted){
+        Serial.println("SPIFFS formatted");
+    }
+    else {
+        Serial.println("SPIFFS not formatted");
+    }
 }
