@@ -1,5 +1,4 @@
 # SPIFFS\_Remove\_All
----
 
 One file program to remove all SPIFFS data, for use with the Arduino IDE.
 
