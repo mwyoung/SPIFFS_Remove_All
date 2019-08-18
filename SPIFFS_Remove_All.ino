@@ -13,10 +13,10 @@ void setup() {
     Serial.begin(115200);
 
     if (!SPIFFS.begin()){
-        Serial.println("SPIFFS init failed...");
+        Serial.println("\nSPIFFS init failed...");
         while (1) { delay(1); } //stop program
     }
-    Serial.println("SPIFFS init");
+    Serial.println("\nSPIFFS init");
 
     listFiles();
     removeFiles();
